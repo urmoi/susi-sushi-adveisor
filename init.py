@@ -19,7 +19,7 @@ door_contact = None                         # True if door is closed
 # Sensors
 ud_tof = 0.0                                # vertical ToF sensor
 lr_tof = 0.0                                # horizontal ToF sensor
-tof = (ud_tof, lr_tof)                      # ToF sensor
+tof = (ud_tof, lr_tof)                      # tuple of ToF sensor data
 
 f1_button = None                            # filling 1 button
 f2_button = None                            # filling 2 button
@@ -38,14 +38,14 @@ f3_servo = None                             # filling 3 servo motor
 temp_servo = None                           # template servo motor
 
 # Positions
-table = (0.0, 0.0)                          # percentage % position of the table
+table = (0.0, 0.0)                          # tuple percentage % position of the table
 
 # States
 template = False                            # True if template is down
 fillings = (False, False, False)            # True if filling selected
 
 
-def tof2pos(tof:tuple, dim:tuple) -> tuple:
+def tof2pos(tof:tuple) -> tuple:
     """
     Convert ToF sensor value to percentage position [ud, lr].
 

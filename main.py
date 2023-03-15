@@ -6,7 +6,7 @@ from check import homing
 # Example Code
 def main():
 
-    table = init.tof2pos((100, 120), init.dim)
+    table = init.tof2pos((20, 100))
 
     viz.table_position(table)
 

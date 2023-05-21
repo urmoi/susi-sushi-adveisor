@@ -1,63 +1,109 @@
-# Global variables
-
-# Dimensions
-dim = {                                     # dimensions of movement in mm, measured with tof sensor
-    "ud": {"min": 10, "max": 130},          # ud = up-down / vertical min and max reachable position
-    "lr": {"min": 50, "max": 250}           # lr = left-right / horizontal min and max reachable position
-}
-
-# Display
-display = None                              # Display object
-
-# Contacts
-roller_contact = None                       # True if roller is in machine
-fillings_contact = None                     # True if fillings are in machine
-template_contact = None                     # True if template is in machine
-table_contact = None                        # True if table is in machine
-door_contact = None                         # True if door is closed
-
-# Sensors
-ud_tof = 0.0                                # vertical ToF sensor
-lr_tof = 0.0                                # horizontal ToF sensor
-tof = (ud_tof, lr_tof)                      # tuple of ToF sensor data
-
-f1_button = None                            # filling 1 button
-f2_button = None                            # filling 2 button
-f3_button = None                            # filling 3 button
-
-start_button = None                         # start button
-
-# Motors
-v_step = None                               # vertical stepper motor
-h_step= None                                # horizontal stepper motor
-
-f1_servo = None                             # filling 1 servo motor
-f2_servo = None                             # filling 2 servo motor
-f3_servo = None                             # filling 3 servo motor
-
-temp_servo = None                           # template servo motor
-
-# Positions
-table = (0.0, 0.0)                          # tuple percentage % position of the table
-
-# States
-template = False                            # True if template is down
-fillings = (False, False, False)            # True if filling selected
+from Components import Button, HallSensor, StepperMotor, ContinuousServoMotor, StandardServoMotor, ToFDistanceSensor, LEDrgb
+from config import load_config
 
 
-def tof2pos(tof:tuple) -> tuple:
-    """
-    Convert ToF sensor value to percentage position [ud, lr].
+__config: dict = load_config()
+__components: dict = __config.get('components')
+__dimensions: dict = __config.get('dimensions')
 
-        min          max
-    max 0.0 -- lr -- 1.0
-         |
-        ud
-         |
-    min 1.0
 
-    """
-    return (
-        (tof[0]-dim["ud"]["max"])/(dim["ud"]["min"]-dim["ud"]["max"]),  # ud = up-down / vertical
-        (tof[1]-dim["lr"]["min"])/(dim["lr"]["max"]-dim["lr"]["min"])   # lr = left-right / horizontal
-    )
+DIMENSIONS: dict = __dimensions
+
+# BUTTONS
+try:
+    buttons = __components.get('buttons')
+
+    # Ingredient Buttons
+    BUTTON_INGR1 = Button(buttons.get('ingredient1'))
+    BUTTON_INGR2 = Button(buttons.get('ingredient2'))
+    BUTTON_INGR3 = Button(buttons.get('ingredient3'))
+
+    # Menu Buttons
+    BUTTON_START = Button(buttons.get('start'))
+    BUTTON_RESET = Button(buttons.get('reset'))
+
+    BUTTON_INGREDIENTS: list = [BUTTON_INGR1, BUTTON_INGR2, BUTTON_INGR3]
+
+except AttributeError:
+    print("No buttons found.")
+    exit(1)
+
+
+# RBG LED
+try:
+    leds = __components.get('leds')
+
+    RGBLED = LEDrgb(leds.get('rgbinfo'))
+
+except AttributeError:
+    print("No RGB LED found.")
+    exit(1)
+
+
+# HALL CONTACTS
+try:
+    contacts: dict = __components.get('hall_contacts')
+
+    # Element Contact
+    roller_contact = HallSensor(contacts.get('roller'))
+    ingredients_contact  = HallSensor(contacts.get('ingredients'))
+    template_contact = HallSensor(contacts.get('template'))
+    table_contact = HallSensor(contacts.get('table'))
+
+    # Door Contact
+    door_contact = HallSensor(contacts.get('door'))
+
+except AttributeError:
+    print("No hall contacs found.")
+    exit(1)
+
+
+# POSITION SENSORS
+try:
+    # y-axis, hall sensor
+    POS_Y = HallSensor(__components.get('position').get('pos_y'))
+    # x-axis, tof sensor
+    POS_X = ToFDistanceSensor(__components.get('position').get('pos_x'))
+
+except AttributeError:
+    print("No position sensors found.")
+    exit(1)
+
+
+# MOTORS
+# Movement
+try:    
+    # y-axis, stepper motor
+    MOVE_Y = StepperMotor(__components.get('motors').get('move_y'))
+    # x-axis, servo motor
+    MOVE_X = ContinuousServoMotor(__components.get('motors').get('move_x'))
+
+except AttributeError:
+    print("No motors for movement found.")
+    exit(1)
+
+
+# Helpers
+try:
+    # folding servo motor
+    MOVE_FOLD = StandardServoMotor(__components.get('motors').get('fold'))
+    # forming servo motor
+    MOVE_TEMPLATE = StandardServoMotor(__components.get('motors').get('template'))
+
+except AttributeError:
+    print("No Helper motors (fold and template) found.")
+    exit(1)
+
+
+# Ingredients
+try:
+    # ingredient servo motor
+    MOVE_INGR1 = StandardServoMotor(__components.get('motors').get('ingredient1'))
+    MOVE_INGR2 = StandardServoMotor(__components.get('motors').get('ingredient2'))
+    MOVE_INGR3 = StandardServoMotor(__components.get('motors').get('ingredient3'))
+
+    MOVE_INGREDIENTS: list = [MOVE_INGR1, MOVE_INGR2, MOVE_INGR3]
+
+except AttributeError:
+    print("No Ingredients motors found.")
+    exit(1)

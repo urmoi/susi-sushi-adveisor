@@ -1,0 +1,24 @@
+L 4 0       ; ready light (yellow)
+C 1         ; calibrate
+L 3 0       ; calibration finished (blue)
+R 1         ; reset button on
+J 1         ; ingridient buttons on
+S 1         ; wait for start pressed
+T 1         ; place template
+S 2         ; wait for ingridient selected
+J 0         ; ingridient buttons off
+M 10 N      ; move to rice roller
+W 500       ; wait 500ms
+M 0 0       ; move to home
+T 0         ; remove template
+M 10 N      ; move to ingridient box
+I 1         ; fill with ingridients
+I 0         ; reset ingridient compartements
+M 0 0       ; move to home
+F 1         ; activate folding frame
+M N -10     ; move down to folding frame
+W 500       ; wait 500ms
+M 0 0       ; move to home
+F 0         ; deactivate folding frame
+L 2 0       ; finished light (green)
+E           ; end

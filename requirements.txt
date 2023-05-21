@@ -1,0 +1,9 @@
+getch
+smbus
+smbus2
+RPi.GPIO
+buttonshim
+adafruit-blinka
+adafruit-circuitpython-vl53l4cd
+adafruit-circuitpython-motorkit
+adafruit-circuitpython-servokit

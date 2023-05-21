@@ -1,0 +1,166 @@
+{
+    "dimensions": {
+        "size": {
+            "x": 3,
+            "y": 90
+        },
+        "offset": {
+            "x": 28,
+            "y": -6
+        },
+        "thread": 3
+    },
+    "components": {
+        "position": {
+            "pos_y": {
+                "name": "Y Position (Hall)",
+                "key": "pos_y",
+                "type": "hall",
+                "pin": 11,
+                "GPIO": 17
+            },
+            "pos_x": {
+                "name": "X Position (ToF)",
+                "key": "pos_x",
+                "type": "tof"
+            }
+        },
+        "motors": {
+            "move_y": {
+                "name": "Stepper Y Movement",
+                "key": "move_y",
+                "type": "stepper",
+                "up": "backward",
+                "down": "forward",
+                "steps": 200,
+                "number": 1
+            },
+            "move_x": {
+                "name": "Servo X Movement",
+                "key": "move_x",
+                "type": "servo_continous",
+                "slot": 0,
+                "right": -1,
+                "left": 1,
+                "speed": 1.0
+            },
+            "ingredient1": {
+                "name": "Servo Ingredient 1",
+                "key": "ingredient1",
+                "type": "servo",
+                "slot": 1,
+                "neutral": 0,
+                "active": 180
+            },
+            "ingredient2": {
+                "name": "Servo Ingredient 2",
+                "key": "ingredient2",
+                "type": "servo",
+                "slot": 2,
+                "neutral": 0,
+                "active": 180
+            },
+            "ingredient3": {
+                "name": "Servo Ingredient 3",
+                "key": "ingredient3",
+                "type": "servo",
+                "slot": 3,
+                "neutral": 0,
+                "active": 180
+            },
+            "fold": {
+                "name": "Servo Folding Frame",
+                "key": "fold",
+                "type": "servo",
+                "slot": 4,
+                "neutral": 0,
+                "active": 90
+            },
+            "template": {
+                "name": "Servo Rice Template",
+                "key": "template",
+                "type": "servo",
+                "slot": 5,
+                "neutral": 0,
+                "active": 90
+            }
+        },
+        "buttons": {
+            "ingredient1": {
+                "name": "Button Ingredient 1",
+                "key": "ingredient1",
+                "type": "switch",
+                "slot": null
+            },
+            "ingredient2": {
+                "name": "Button Ingredient  2",
+                "key": "ingredient2",
+                "type": "switch",
+                "slot": null
+            },
+            "ingredient3": {
+                "name": "Button Ingredient 3",
+                "key": "ingredient3",
+                "type": "switch",
+                "slot": null
+            },
+            "start": {
+                "name": "Button Start",
+                "key": "start",
+                "type": "button",
+                "slot": null
+            },
+            "reset": {
+                "name": "Button reset",
+                "key": "reset",
+                "type": "button",
+                "slot": null
+            }
+        },
+        "leds": {
+            "rgbinfo": {
+                "name": "LED Info",
+                "key": "rgbinfo",
+                "type": "rgbled",
+                "blink_speed": 1.0
+            }
+        },
+        "hall_contacts": {
+            "roller": {
+                "name": "Hall Contact Rice Roller",
+                "key": "roller",
+                "type": "hall",
+                "pin": null,
+                "GPIO": null
+            },
+            "ingredients": {
+                "name": "Hall Contact Ingredient Box",
+                "key": "ingredients",
+                "type": "hall",
+                "pin": null,
+                "GPIO": null
+            },
+            "template": {
+                "name": "Hall Contact Rice Template",
+                "key": "template",
+                "type": "hall",
+                "pin": null,
+                "GPIO": null
+            },
+            "table": {
+                "name": "Hall Contact Table",
+                "key": "table",
+                "type": "hall",
+                "pin": null,
+                "GPIO": null
+            },
+            "door": {
+                "name": "Hall Contact Door",
+                "key": "door",
+                "type": "hall",
+                "pin": null,
+                "GPIO": null
+            }
+        }
+    }
+}

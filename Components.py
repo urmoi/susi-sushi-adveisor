@@ -27,6 +27,12 @@ from adafruit_servokit import ServoKit
 
 class Button:
     def __init__(self, button: dict):
+        try:
+            buttonshim.setup()
+        except OSError:
+            print("ButtonSHIM not installed")
+            exit(1)
+        
         self._shim_slot = self._find_shim_slot(button.get('slot'))
         self.name: str = button.get('name')
         self.type: str = button.get('type')
@@ -92,6 +98,12 @@ class Button:
 
 class LEDrgb:
     def __init__(self, led: dict) -> None:
+        try:
+            buttonshim.setup()
+        except OSError:
+            print("ButtonSHIM not installed")
+            exit(1)
+    
         self.name: str = led.get('name')
         self.type: str = led.get('type')
         self._blink_speed = led.get('blink_speed')
@@ -272,7 +284,7 @@ class ToFDistanceSensor:
             self._vl53 = adafruit_vl53l4cd.VL53L4CD(board.I2C())
         except ValueError:
             print("ToF Board not installed")
-            exit(1)
+
         self.name: str = tof.get('name')
         self.type: str = tof.get('type')
         # self.vl53.inter_measurement = 0

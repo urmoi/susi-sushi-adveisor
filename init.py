@@ -26,7 +26,6 @@ try:
 
 except AttributeError:
     print("No buttons found.")
-    exit(1)
 
 
 # RBG LED
@@ -37,7 +36,6 @@ try:
 
 except AttributeError:
     print("No RGB LED found.")
-    exit(1)
 
 
 # HALL CONTACTS
@@ -55,7 +53,6 @@ try:
 
 except AttributeError:
     print("No hall contacs found.")
-    exit(1)
 
 
 # POSITION SENSORS
@@ -67,7 +64,6 @@ try:
 
 except AttributeError:
     print("No position sensors found.")
-    exit(1)
 
 
 # MOTORS
@@ -80,7 +76,6 @@ try:
 
 except AttributeError:
     print("No motors for movement found.")
-    exit(1)
 
 
 # Helpers
@@ -92,7 +87,6 @@ try:
 
 except AttributeError:
     print("No Helper motors (fold and template) found.")
-    exit(1)
 
 
 # Ingredients
@@ -106,4 +100,3 @@ try:
 
 except AttributeError:
     print("No Ingredients motors found.")
-    exit(1)

@@ -1,16 +1,21 @@
 import sys
 
-# import RPi.GPIO as GPIO
-
 import controller
 import init
+
+# import RPi.GPIO as GPIO
+
 
 
 def main() -> None:
 
     # check if debug mode is enabled
-    # exits when pin 37 is connected to ground
+    # exits when pin 37 | GPIO26 is connected to ground
     check_debug_mode()
+
+    # check if calibration was done
+    # exits when calibration is needed
+    check_calibration()
 
     # default instruction file
     filename: str = 'instructions'
@@ -52,18 +57,35 @@ def check_debug_mode() -> bool:
     print("\n\n")
     print(" Pin 37 | GPIO26 is connected to ground. Going in Debug Mode.")
     print(" To start in Auto Mode, disconnect Pin 37 | GPIO26 from ground.")
-    print("(Both Pins on the left Bottom, when the USBs are on the left)\n\n")
+    print(" (Both Pins on the left Bottom, when the USBs are on the left)\n\n")
     print("#########################  DEBUG MODE  #########################\n")
     print("                     >  maybe run following scripts:\n")
+    print("                        main.py <filename> [-v | -V]\n")
     print("                        _test_hall.py")
     print("                        _test_tof.py")
     print("                        _test_buttons.py")
-    print("                        _calibrate_axes.py\n")
+    print("                        _test_motors.py")
+    print("                        _calibrate_axes.py\n\n")
     print("                     >  exiting ...")
     print("\n\n")
 
     exit(0)
 
+
+def check_calibration() -> bool:
+    for dimension in init.DIMENSIONS.values():
+        for axis in dimension.values():
+            if axis is None:
+                print("\n\n")
+                print(" Axes Calibration is needed. Going in Debug Mode.\n\n")
+                print("#########################  DEBUG MODE  #########################\n")
+                print("                     >  maybe run following scripts:\n")
+                print("                        _calibrate_axes.py\n\n")
+                print("                     >  exiting ...")
+                print("\n\n")
+
+                exit(0)
+    return True
 
 if __name__ == "__main__":
     main()

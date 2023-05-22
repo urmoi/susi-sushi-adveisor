@@ -4,7 +4,7 @@ import time
 from Components import ContinuousServoMotor, ToFDistanceSensor, StepperMotor, HallSensor
 
 import visualization as vis
-from config import load_config, save_config, save_dimensions_to_config
+from _config import load_config, save_config, save_dimensions_to_config
 
 
 def axes_list(saved):

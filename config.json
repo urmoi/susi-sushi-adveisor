@@ -1,12 +1,12 @@
 {
     "dimensions": {
         "size": {
-            "x": 3,
-            "y": 90
+            "x": null,
+            "y": null
         },
         "offset": {
-            "x": 28,
-            "y": -6
+            "x": null,
+            "y": null
         },
         "thread": 3
     },
@@ -90,31 +90,31 @@
                 "name": "Button Ingredient 1",
                 "key": "ingredient1",
                 "type": "switch",
-                "slot": null
+                "slot": "B"
             },
             "ingredient2": {
                 "name": "Button Ingredient  2",
                 "key": "ingredient2",
                 "type": "switch",
-                "slot": null
+                "slot": "C"
             },
             "ingredient3": {
                 "name": "Button Ingredient 3",
                 "key": "ingredient3",
                 "type": "switch",
-                "slot": null
+                "slot": "D"
             },
             "start": {
                 "name": "Button Start",
                 "key": "start",
                 "type": "button",
-                "slot": null
+                "slot": "A"
             },
             "reset": {
                 "name": "Button reset",
                 "key": "reset",
                 "type": "button",
-                "slot": null
+                "slot": "E"
             }
         },
         "leds": {

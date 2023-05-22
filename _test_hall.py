@@ -1,7 +1,7 @@
 import time
 
 from Components import HallSensor
-from config import load_components_config
+from _config import load_components_config
 import visualization as vis
 
 

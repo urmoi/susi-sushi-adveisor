@@ -1,5 +1,5 @@
 from Components import Button, HallSensor, StepperMotor, ContinuousServoMotor, StandardServoMotor, ToFDistanceSensor, LEDrgb
-from config import load_config
+from _config import load_config
 
 
 __config: dict = load_config()

@@ -1,7 +1,7 @@
 import time
 
 from Components import Button, LEDrgb
-from config import load_components_config
+from _config import load_components_config
 import visualization as vis
 
 

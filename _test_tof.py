@@ -1,7 +1,7 @@
 import time
 
 from Components import ToFDistanceSensor
-from config import load_components_config, load_dimensions_config
+from _config import load_components_config, load_dimensions_config
 import visualization as vis
 
 

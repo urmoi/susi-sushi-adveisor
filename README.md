@@ -9,7 +9,8 @@ This is the Codebase for our automated Sushi Machine in regards of the [TU Munic
 The goal of this project is to build a robot that can assist in the kitchen.
 The robot should be able to prepare a meal from start to finish and should be easy to use.
 
-The maschine is 3D printed and motorized, controlled by a Raspberry Pi Zero W.
+The maschine is 3D printed and motorized, sensorized, and controlled by a Raspberry Pi Zero W.
+The schematics are down below, the 3D files will be eventually uploaded to this repository.
 
 ---
 
@@ -32,7 +33,7 @@ The maschine is 3D printed and motorized, controlled by a Raspberry Pi Zero W.
      - Custom G-code flavored instruction commands (.scode)
      - Custom interpreter | controller (controller.py)
      - Config file (.json) to setup the Components
-     - Test and Calibrations Scripts with terminal interface
+     - Test and Calibrations Scripts (beginning with _) | CLI
 
 ---
 

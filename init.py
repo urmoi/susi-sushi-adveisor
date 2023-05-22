@@ -1,4 +1,8 @@
-from Components import Button, HallSensor, StepperMotor, ContinuousServoMotor, StandardServoMotor, ToFDistanceSensor, LEDrgb
+from Components import (
+    StepperMotor, ContinuousServoMotor, StandardServoMotor,
+    ToFDistanceSensor, HallSensor,
+    Button, LEDrgb, GPIOPin
+)
 from _config import load_config
 
 
@@ -100,3 +104,7 @@ try:
 
 except AttributeError:
     print("No Ingredients motors found.")
+
+
+# DEBUG PIN
+DEPUG_PIN = GPIOPin(gpio=26)

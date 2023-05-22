@@ -4,6 +4,7 @@ import board
 
 # GPIOpip  Library
 import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
 
 # Button Hat Library
 # https://github.com/pimoroni/button-shim
@@ -130,35 +131,6 @@ class LEDrgb:
         # Convert the hexadecimal string to RGB values
         return tuple(int(rgb_hex[i:i+2], 16) for i in (0, 2, 4))
         
-
-class HallSensor:
-    # https://bitbucket.org/MattHawkinsUK/rpispy-misc/raw/master/python/hall.py
-    def __init__(self, hall: dict, callback=None):
-        self.name: str = hall.get('name')
-        self.type: str = hall.get('type')
-        self.pin: int = hall.get('pin')
-        self.GPIO: int = hall.get('GPIO')
-        self._bounce_time: int = 200
-        self._callback = callback
-        # Set Switch GPIO as input + pull high (no magnet) by default
-        if self.GPIO:
-            GPIO.setup(self.GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        # Listen for switch presses
-        if callback:
-            GPIO.add_event_detect(self.GPIO, GPIO.BOTH, callback=self.state_changed, bouncetime=self._bounce_time)
-
-    def check_init(self) -> bool:
-        return bool(self.GPIO)
-
-    def sense_magnet(self) -> bool:
-        # if Magnet -> LOW == not True
-        return not GPIO.input(self.GPIO)
-    
-    def state_changed(self) -> bool:
-        if self._callback:
-            return self._callback(self.sense_magnet())
-        return False
-
 
 class StepperMotor:
     _direction_options = {
@@ -300,3 +272,42 @@ class ToFDistanceSensor:
         # return the distance in mm minus the offset
         # reflecting area is not at the front of the table
         return int(self._vl53.distance*10) - offset
+    
+
+class HallSensor:
+    # https://bitbucket.org/MattHawkinsUK/rpispy-misc/raw/master/python/hall.py
+    def __init__(self, hall: dict, callback=None):
+        self.name: str = hall.get('name')
+        self.type: str = hall.get('type')
+        self.pin: int = hall.get('pin')
+        self.GPIO: int = hall.get('GPIO')
+        self._bounce_time: int = 200
+        self._callback = callback
+        # Set Switch GPIO as input + pull high (no magnet) by default
+        if self.GPIO:
+            GPIO.setup(self.GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        # Listen for switch presses
+        # if callback:
+        #     GPIO.add_event_detect(self.GPIO, GPIO.BOTH, callback=self.state_changed, bouncetime=self._bounce_time)
+
+    def check_init(self) -> bool:
+        return bool(self.GPIO)
+
+    def sense_magnet(self) -> bool:
+        # if Magnet -> LOW == not True
+        return not GPIO.input(self.GPIO)
+    
+    # def state_changed(self) -> bool:
+    #     if self._callback:
+    #         return self._callback(self.sense_magnet())
+    #     return False
+    
+
+class GPIOPin:
+    def __init__(self, gpio: int):
+        self.GPIO: int = gpio
+        # Set Switch GPIO as input + pull high (no magnet) by default
+        GPIO.setup(self.GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    def sense(self) -> bool:
+        return bool(self.GPIO)

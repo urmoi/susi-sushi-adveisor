@@ -15,7 +15,7 @@ The maschine is 3D printed and motorized, controlled by a Raspberry Pi Zero W.
 
 ## Functionality and Features
 
-### Mechaninics:
+### Mechaninics
 
     1. Automatic Distribution of Sushi Rice
     2. Automatic Loading of Ingredients
@@ -26,7 +26,7 @@ The maschine is 3D printed and motorized, controlled by a Raspberry Pi Zero W.
 
        Easy Removing and Cleaning of dirty Parts
 
-### Codebase:
+### Codebase
 
      - Python 3.9 running on a Raspberry Pi Zero W
      - Custom G-code flavored instruction commands (.scode)

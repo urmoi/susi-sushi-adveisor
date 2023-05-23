@@ -306,7 +306,7 @@ class HallSensor:
 class GPIOPin:
     def __init__(self, gpio: int):
         self.GPIO: int = gpio
-        # Set Switch GPIO as input + pull high (no magnet) by default
+        # Set Switch GPIO as input + pull high by default
         GPIO.setup(self.GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def sense(self) -> bool:

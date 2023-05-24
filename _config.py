@@ -78,16 +78,16 @@ def show_config(section: str=None) -> bool:
                         print(f"         {key1.capitalize()} : {value:3} mm")
                         continue
                     print(f"         {key1.capitalize()}:")
-                    for key2, property in value.items():
-                        print(f"           -  {key2.capitalize()} : {property:3} mm")
+                    for key2, dim in value.items():
+                        print(f"           -  {key2.capitalize()} : {dim:3 if dim else 'Not set' } mm")
                 elif key == "components":
                     print(f"       # {key1.upper()}:")
                     for key2, group in value.items():
                         print(f"           {key2.capitalize()}:")
-                        for key3, property in group.items():
+                        for key3, val in group.items():
                             if key3 == "key":
                                 continue
-                            print(f"             |- {key3:7} : {property}")
+                            print(f"             |- {key3:7} : {val}")
     
     show_config_menu()
 

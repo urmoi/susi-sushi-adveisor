@@ -1,6 +1,6 @@
 import getch
 
-from Components import StandardServoMotor
+from __Components import StandardServoMotor
 
 import visualization as vis
 from _config import load_components_config, save_components_to_config
@@ -28,10 +28,11 @@ def main():
     for motor in motors:
         motor.set_position(position)
 
-    try: 
-        while True:
+    while True:
+        try: 
             if changed:
-                components.get('motors')[changed.key] = changed
+                components.get('motors')[changed.key]['neutral'] = changed.neutral
+                components.get('motors')[changed.key]['active'] = changed.active
                 save_components_to_config(components)
                 changed = None
 
@@ -66,11 +67,10 @@ def main():
                     motor = motors[index]
                     motor.active, motor.neutral = motor.neutral, motor.active
                     motor.set_position(position)
+                    changed = motor
 
-            # print(components.get('motors'))
-
-    except KeyboardInterrupt:
-        vis.exit_terminal_menu(prompt=f"Motor Testing ended.")
+        except KeyboardInterrupt:
+            vis.exit_terminal_menu(prompt=f"Motor Testing ended.")
 
 
 

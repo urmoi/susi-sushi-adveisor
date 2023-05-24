@@ -36,6 +36,7 @@ class Button:
         
         self._shim_slot = self._find_shim_slot(button.get('slot'))
         self.name: str = button.get('name')
+        self.key: str = button.get('key')
         self.type: str = button.get('type')
         self._state: bool = False
         self._callback = None
@@ -106,6 +107,7 @@ class LEDrgb:
             exit(1)
     
         self.name: str = led.get('name')
+        self.key: str = led.get('key')
         self.type: str = led.get('type')
         self._blink_speed = led.get('blink_speed')
 
@@ -145,6 +147,7 @@ class StepperMotor:
             exit(1)
 
         self.name: str = stepper.get('name')
+        self.key: str = stepper.get('key')
         self.type: str = stepper.get('type')
         self.steps: int = stepper.get('steps')
         self._number: int = stepper.get('number')
@@ -192,6 +195,7 @@ class ContinuousServoMotor:
             exit(1)
 
         self.name: str = servo.get('name')
+        self.key: str = servo.get('key')
         self.type: str = servo.get('type')
         self.slot: int = servo.get('slot')
         self._servo = self._kit.continuous_servo[self.slot]
@@ -225,6 +229,7 @@ class StandardServoMotor:
             exit(1)
 
         self.name: str = servo.get('name')
+        self.key: str = servo.get('key')
         self.type: str = servo.get('type')
         self.slot: int = servo.get('slot')
         self._servo = self._kit.servo[self.slot]
@@ -258,6 +263,7 @@ class ToFDistanceSensor:
             print("ToF Board not installed")
 
         self.name: str = tof.get('name')
+        self.key: str = tof.get('key')
         self.type: str = tof.get('type')
         # self.vl53.inter_measurement = 0
         # self.vl53.timing_budget = 200
@@ -278,6 +284,7 @@ class HallSensor:
     # https://bitbucket.org/MattHawkinsUK/rpispy-misc/raw/master/python/hall.py
     def __init__(self, hall: dict, callback=None):
         self.name: str = hall.get('name')
+        self.key: str = hall.get('key')
         self.type: str = hall.get('type')
         self.pin: int = hall.get('pin')
         self.GPIO: int = hall.get('GPIO')

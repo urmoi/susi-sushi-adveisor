@@ -57,8 +57,8 @@
                 "key": "ingredient2",
                 "type": "servo",
                 "slot": 2,
-                "neutral": 0,
-                "active": 180
+                "neutral": 180,
+                "active": 0
             },
             "ingredient3": {
                 "name": "Servo Ingredient 3",
@@ -73,8 +73,8 @@
                 "key": "fold",
                 "type": "servo",
                 "slot": 4,
-                "neutral": 0,
-                "active": 90
+                "neutral": 90,
+                "active": 0
             },
             "template": {
                 "name": "Servo Rice Template",

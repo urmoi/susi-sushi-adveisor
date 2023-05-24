@@ -1,7 +1,8 @@
 import getch
 
+from Components import StandardServoMotor
+
 import visualization as vis
-from __Components import StandardServoMotor
 from _config import load_components_config, save_components_to_config
 
 

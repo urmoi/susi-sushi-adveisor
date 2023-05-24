@@ -1,10 +1,9 @@
+#!/usr/bin/python3
+
 import sys
 
 import controller
 import init
-
-# import RPi.GPIO as GPIO
-
 
 
 def main() -> None:

@@ -24,7 +24,6 @@ def main():
         
     except KeyboardInterrupt:
         vis.exit_terminal_menu(prompt=f"Hall (Magnet) Sensor ended.")
-        exit(0)
 
 
 if __name__ == "__main__":

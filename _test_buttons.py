@@ -38,7 +38,6 @@ def main():
         
     except KeyboardInterrupt:
         vis.exit_terminal_menu(prompt=f"Buttons and RGB LED ended.")
-        exit(0)
 
 
 if __name__ == "__main__":

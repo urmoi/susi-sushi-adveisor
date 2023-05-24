@@ -27,7 +27,6 @@ def main():
         
     except KeyboardInterrupt:
         vis.exit_terminal_menu(prompt=f"ToF (Time of Flight) Sensor ended.")
-        exit(0)
 
 
 if __name__ == "__main__":

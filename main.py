@@ -2,7 +2,7 @@
 
 import sys
 
-import controller
+import firmware
 import init
 
 
@@ -36,7 +36,7 @@ def main() -> None:
             
 
     try:
-        controller.perform_instruction(filename=filename, verbose=verbose)
+        firmware.perform_instruction(filename=filename, verbose=verbose)
     except (OSError, KeyboardInterrupt):
         init.MOVE_X.stop()
         init.MOVE_Y.stop()

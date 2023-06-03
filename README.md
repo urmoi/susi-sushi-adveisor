@@ -31,7 +31,7 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 
      - Python 3.9 running on a Raspberry Pi Zero W
      - Custom G-code flavored instruction commands (.scode)
-     - Custom interpreter | controller (controller.py)
+     - Custom firmware | interpreter (firmware.py)
      - Config file (.json) to setup the Components
      - Test and Calibrations Scripts (beginning with _) | CLI
 

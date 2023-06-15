@@ -1,7 +1,7 @@
 from Components import (
     StepperMotor, ContinuousServoMotor, StandardServoMotor,
     ToFDistanceSensor, HallSensor,
-    Button, LEDrgb, GPIOPin
+    Button, Led, GPIOPin
 )
 from _config import load_config
 
@@ -15,7 +15,7 @@ DIMENSIONS: dict = __dimensions
 
 # BUTTONS
 try:
-    buttons = __components.get('buttons')
+    buttons: dict = __components.get('buttons')
 
     # Ingredient Buttons
     BUTTON_INGR1 = Button(buttons.get('ingredient1'))
@@ -32,32 +32,17 @@ except AttributeError:
     print("No buttons found.")
 
 
-# RBG LED
+# LEDS
 try:
-    leds = __components.get('leds')
+    leds: dict = __components.get('leds')
 
-    RGBLED = LEDrgb(leds.get('rgbinfo'))
+    LED_ORANGE = Led(leds.get('orange'))
+    LED_GREEN = Led(leds.get('green'))
+
+    LEDS = [LED_ORANGE, LED_GREEN]
 
 except AttributeError:
-    print("No RGB LED found.")
-
-
-# HALL CONTACTS
-try:
-    contacts: dict = __components.get('hall_contacts')
-
-    # Element Contact
-    roller_contact = HallSensor(contacts.get('roller'))
-    ingredients_contact  = HallSensor(contacts.get('ingredients'))
-    template_contact = HallSensor(contacts.get('template'))
-    table_contact = HallSensor(contacts.get('table'))
-
-    # Door Contact
-    door_contact = HallSensor(contacts.get('door'))
-
-except AttributeError:
-    print("No hall contacs found.")
-
+    print("No LEDs found.")
 
 # POSITION SENSORS
 try:

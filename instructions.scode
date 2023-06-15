@@ -1,24 +1,35 @@
-L 4 0       ; ready light (yellow)
-C 1         ; calibrate
-L 3 0       ; calibration finished (blue)
-R 1         ; reset button on
-J 1         ; ingridient buttons on
-S 1         ; wait for start pressed
-T 1         ; place template
-S 2         ; wait for ingridient selected
-J 0         ; ingridient buttons off
-M 10 N      ; move to rice roller
-W 500       ; wait 500ms
-M 0 0       ; move to home
+L 1 0       ; machine on (orange light)
+W 1000      ; waiting 1 second
+C 1         ; calibrating
+M 0 0       ; move to start
 T 0         ; remove template
-M 10 N      ; move to ingridient box
+L 2 3       ; calibration finished (green light blinks)
+L 2 0       ; machine ready (green light)
+R 1         ; reset button on
+B 1         ; ingridient buttons on
+S 1         ; wait for start pressed
+L 1 0       ; busy light (orange)
+T 1         ; place template
+W 2000      ; wait 2 seconds
+T 0         ; remove template
+W 1000      ; wait 1 second
+M 110 -15   ;
+M 70 -5     ;
+M 150 0     ;
+M 205 N     ; move to ingridient box
 I 1         ; fill with ingridients
+W 1000      ; wait 1 second
 I 0         ; reset ingridient compartements
-M 0 0       ; move to home
+M 180 -20   ;
+M 80 N      ;
+M 23 0      ; position for folding
+W 2000      ; wait 2 seconds
 F 1         ; activate folding frame
-M N -10     ; move down to folding frame
-W 500       ; wait 500ms
-M 0 0       ; move to home
+M N -50     ; move down for folding
+W 1000      ; wait 1 second
+M N 0       ; move up after folding
 F 0         ; deactivate folding frame
-L 2 0       ; finished light (green)
+M 0 0       ; move to start
+L 2 3       ; making finished (green light blinks)
+L 2 0       ; machine ready (green light)
 E           ; end

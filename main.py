@@ -72,19 +72,20 @@ def check_debug_mode() -> bool:
 
 
 def check_calibration() -> bool:
-    for dimension in init.DIMENSIONS.values():
-        for axis in dimension.values():
-            if axis is None:
-                print("\n\n")
-                print(" Axes Calibration is needed. Going in Debug Mode.\n\n")
-                print("#########################  DEBUG MODE  #########################\n")
-                print("                     >  maybe run following scripts:\n")
-                print("                        _calibrate_axes.py\n\n")
-                print("                     >  exiting ...")
-                print("\n\n")
+    # check if all values in dimensions are set
+    dimensions: list = [init.DIMENSIONS['size']['x'], init.DIMENSIONS['size']['y'], init.DIMENSIONS['offset']['x'], init.DIMENSIONS['offset']['y']]
+    if not all(dimensions):
+        print("\n\n")
+        print(" Axes Calibration is needed. Going in Debug Mode.\n\n")
+        print("#########################  DEBUG MODE  #########################\n")
+        print("                     >  maybe run following scripts:\n")
+        print("                        _calibrate_axes.py\n\n")
+        print("                     >  exiting ...")
+        print("\n\n")
 
-                exit(0)
+        exit(0)
     return True
+   
 
 if __name__ == "__main__":
     main()

@@ -1,12 +1,12 @@
 {
     "dimensions": {
         "size": {
-            "x": null,
-            "y": null
+            "x": 205,
+            "y": 47
         },
         "offset": {
-            "x": null,
-            "y": null
+            "x": 115,
+            "y": -4
         },
         "thread": 3
     },
@@ -33,7 +33,7 @@
                 "up": "backward",
                 "down": "forward",
                 "steps": 200,
-                "number": 1
+                "number": 2
             },
             "move_x": {
                 "name": "Servo X Movement",
@@ -48,7 +48,7 @@
                 "name": "Servo Ingredient 1",
                 "key": "ingredient1",
                 "type": "servo",
-                "slot": 1,
+                "slot": 5,
                 "neutral": 0,
                 "active": 180
             },
@@ -56,7 +56,7 @@
                 "name": "Servo Ingredient 2",
                 "key": "ingredient2",
                 "type": "servo",
-                "slot": 2,
+                "slot": 4,
                 "neutral": 180,
                 "active": 0
             },
@@ -64,25 +64,25 @@
                 "name": "Servo Ingredient 3",
                 "key": "ingredient3",
                 "type": "servo",
-                "slot": 3,
-                "neutral": 0,
-                "active": 180
+                "slot": 2,
+                "neutral": 180,
+                "active": 0
             },
             "fold": {
                 "name": "Servo Folding Frame",
                 "key": "fold",
                 "type": "servo",
-                "slot": 4,
-                "neutral": 90,
-                "active": 0
+                "slot": 8,
+                "neutral": 0,
+                "active": 100
             },
             "template": {
                 "name": "Servo Rice Template",
                 "key": "template",
                 "type": "servo",
-                "slot": 5,
-                "neutral": 0,
-                "active": 90
+                "slot": 3,
+                "neutral": 5,
+                "active": 130
             }
         },
         "buttons": {
@@ -90,76 +90,52 @@
                 "name": "Button Ingredient 1",
                 "key": "ingredient1",
                 "type": "switch",
-                "slot": "B"
+                "pin": 16,
+                "gpio": 23
             },
             "ingredient2": {
-                "name": "Button Ingredient  2",
+                "name": "Button Ingredient 2",
                 "key": "ingredient2",
                 "type": "switch",
-                "slot": "C"
+                "pin": 18,
+                "gpio": 24
             },
             "ingredient3": {
                 "name": "Button Ingredient 3",
                 "key": "ingredient3",
                 "type": "switch",
-                "slot": "D"
+                "pin": 29,
+                "gpio": 5
             },
             "start": {
                 "name": "Button Start",
                 "key": "start",
                 "type": "button",
-                "slot": "A"
+                "pin": 22,
+                "gpio": 25
             },
             "reset": {
-                "name": "Button reset",
+                "name": "Button Reset",
                 "key": "reset",
                 "type": "button",
-                "slot": "E"
+                "pin": 31,
+                "gpio": 6
             }
         },
         "leds": {
-            "rgbinfo": {
-                "name": "LED Info",
-                "key": "rgbinfo",
-                "type": "rgbled",
-                "blink_speed": 1.0
-            }
-        },
-        "hall_contacts": {
-            "roller": {
-                "name": "Hall Contact Rice Roller",
-                "key": "roller",
-                "type": "hall",
-                "pin": null,
-                "GPIO": null
+            "orange": {
+                "name": "LED Orange",
+                "key": "orange",
+                "type": "led",
+                "pin": 13,
+                "gpio": 27
             },
-            "ingredients": {
-                "name": "Hall Contact Ingredient Box",
-                "key": "ingredients",
-                "type": "hall",
-                "pin": null,
-                "GPIO": null
-            },
-            "template": {
-                "name": "Hall Contact Rice Template",
-                "key": "template",
-                "type": "hall",
-                "pin": null,
-                "GPIO": null
-            },
-            "table": {
-                "name": "Hall Contact Table",
-                "key": "table",
-                "type": "hall",
-                "pin": null,
-                "GPIO": null
-            },
-            "door": {
-                "name": "Hall Contact Door",
-                "key": "door",
-                "type": "hall",
-                "pin": null,
-                "GPIO": null
+            "green": {
+                "name": "LED Green",
+                "key": "green",
+                "type": "led",
+                "pin": 15,
+                "gpio": 22
             }
         }
     }

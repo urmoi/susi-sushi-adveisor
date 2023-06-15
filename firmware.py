@@ -1,28 +1,28 @@
-# # : Comment                   prints comment (or  seperated with ; after command, which not prints)
+# # : Comment                       prints comment (or  seperated with ; after command, which not prints)
 
 # A
-# B : Buzzer            #       [0=off, 1=on]
-# C : Calibrate         #       [0=always, 1=once], calibrate Y axis with offset
+# B : Button Ingredients    #       [0=off, 1=on] Ingredient buttons
+# C : Calibrate             #       [0=always, 1=once], calibrate Y axis with offset
 # D
-# E : End                       marks end of recipe, resets 
-# F : Fold              #       [0=neutral, 1=active]
+# E : End                           marks end of recipe, resets 
+# F : Fold                  #       [0=neutral, 1=active]
 # G
-# H : Hall                      check contact hall sensors
-# I : Ingredients       #       [0=neutral, 1=active (only selected)]
-# J : Jngredients       #       [0=off, 1=on] Ingredient buttons
+# H
+# I : Ingredients           #       [0=neutral, 1=active (only selected)]
+# J
 # K
-# L : LED               #   #   [light -> 0=off, 1=red, 2=green, 3=blue, 4=yellow, 5=magenta, 6=cyan, 7=white] [blink -> 0=noBlink, #=Blink]
-# M : Move              #   #   [X] [Y], position in mm, [0 0] is top left, NaN=NoMovement)
+# L : LED                   #   #   [light -> 0=off, 1=orange, 2=green] [blink -> 0=noBlink, #=Blink]
+# M : Move                  #   #   [X] [Y], position in mm, [0 0] is top left, NaN=NoMovement)
 # N
 # O
 # P
 # Q
-# R : Reset Button      #       [mode -> 0=None, 1=reset, -1=error]
-# S : Start Button      #       [mode -> 0=None, 1=start, 2=wait for ingredients, -1=error]
-# T : Template          #       [0=neutral, 1=active]
+# R : Reset Button          #       [mode -> 0=None, 1=reset, -1=error]
+# S : Start Button          #       [mode -> 0=None, 1=start, 2=wait for ingredients, -1=error]
+# T : Template              #       [0=neutral, 1=active]
 # U
 # V
-# W : Wait              #       [time in miliseconds]
+# W : Wait                  #       [time in miliseconds]
 # X
 # Y
 # Z
@@ -37,7 +37,7 @@ from init import (
     MOVE_X, MOVE_Y, POS_X, POS_Y, 
     MOVE_FOLD, MOVE_INGREDIENTS, MOVE_TEMPLATE,
     BUTTON_INGREDIENTS, BUTTON_START, BUTTON_RESET,
-    RGBLED
+    LEDS, LED_ORANGE, LED_GREEN
 )
 
 
@@ -95,19 +95,15 @@ def perform_instruction(filename: str='instructions', verbose: int=1) -> bool:
             try:
                 # check command
                 if command[0] == 'B':
-                    command_buzzer(active=command[1], verbose=verbose)
+                    command_button(active=command[1], verbose=verbose)
                 elif command[0] == 'C':
                     command_calibrate(mode=command[1], verbose=verbose)
                 elif command[0] == 'E':
                     command_end(verbose=verbose)
                 elif command[0] == 'F':
                     command_fold(active=command[1], verbose=verbose)
-                elif command[0] == 'H':
-                    command_hall(verbose=verbose)
                 elif command[0] == 'I':
                     command_ingredients(active=command[1], verbose=verbose)
-                elif command[0] == 'J':
-                    command_jngredients(active=command[1], verbose=verbose)
                 elif command[0] == 'L':
                     command_led(color=command[1], blink=command[2], verbose=verbose)
                 elif command[0] == 'M':
@@ -136,13 +132,22 @@ def perform_instruction(filename: str='instructions', verbose: int=1) -> bool:
         
 
 
-def command_buzzer(active: int, verbose: int=0) -> None:
-    # component not implemented
-    if verbose == 2: print(f" > Buzzer: not implemented")
+def command_button(active: int, verbose: int=0) -> None:
+    # active: 0=off, 1=on
+    if verbose == 2: print(f" > Ingredient Buttons: {'on for selection' if active else 'off and all deselected'}")
+    for button in BUTTON_INGREDIENTS:
+        if bool(active):  
+            # toggle ingredient on button press, blink depending on status
+            button.set_callback(callback=lambda: led_switch(state=button.status())) 
+        else:
+            # reset ingredient button status
+            button.deselect()
+            button.set_callback(callback=None)
     return
 
 
 def command_calibrate(mode: int=0, verbose: int=0) -> None:
+    # mode: 0=always, 1=once
     if mode == 0 or YPOSITION is None:
         if verbose == 2: print(" > Calibrating...")
         calibrate()
@@ -154,20 +159,20 @@ def command_calibrate(mode: int=0, verbose: int=0) -> None:
 
 def command_end(verbose: int=0) -> None:
     if verbose == 2: print(" > Ending...")
-    reset()
+    command_fold(active=0)
+    command_move(x=0, y=0)
+    command_template(active=0)
+    command_ingredients(active=0)
+    command_button(active=0)
+    led_ready()
     return
 
 
 def command_fold(active: int, verbose: int=0) -> None:
     # active: 0=neutral, 1=active
     if verbose == 2: print(f" > Fold moved: {'active' if active else 'neutral'}")
-    MOVE_FOLD.set_position(active=bool(active))
-    return
-
-
-def command_hall(verbose: int=0) -> None:
-    # components not implemented
-    if verbose == 2: print(" > Hall contact sensors: not implemented")
+    position: str = 'active' if active else 'neutral'
+    MOVE_FOLD.set_position(position=position)
     return
 
 
@@ -177,47 +182,43 @@ def command_ingredients(active: int, verbose: int=0) -> None:
     if verbose == 2 and  not active: print("all to neutral")
     for ingredient in MOVE_INGREDIENTS:
         if bool(active):
-            selected: bool = BUTTON_INGREDIENTS[MOVE_INGREDIENTS.index(ingredient)].state()
+            selected: bool = BUTTON_INGREDIENTS[MOVE_INGREDIENTS.index(ingredient)].status()
             if verbose == 2: print(f"[{ingredient.name}: ", end='')
             if selected:
                 if verbose == 2: print(" on] ", end='')
-                ingredient.set_position(active=True)
+                ingredient.set_position(position='active')
             else:
                 if verbose == 2: print("off] ", end='')
-                ingredient.set_position(active=False)
+                ingredient.set_position(position='neutral')
             if verbose == 2: print()
         else:
-            ingredient.set_position(active=False)
+            ingredient.set_position(position='neutral')
     return
 
 
-def command_jngredients(active: int, verbose: int=0) -> None:
-    # active: 0=off, 1=on
-    if verbose == 2: print(f" > Ingredient Buttons: {'on for selection' if active else 'off and all deselected'}")
-    for button in BUTTON_INGREDIENTS:
-        if bool(active):  
-            # toggle ingredient on button press, blink depending on state
-            button.set_callback(callback=[lambda: button.toggle(), lambda: led_switch(state=button.state())]) 
-        else:
-            # reset ingredient button state
-            button.deselect()
-            button.set_callback(callback=None)
-    return
-
-
-def command_led(color: int|str, blink: int, verbose: int=0) -> None:
-    # color: 0=off, 1=red, 2=green, 3=blue, 4=yellow, 5=magenta, 6=cyan, 7=white
+def command_led(color: int, blink: int, verbose: int=0) -> None:
+    # color: 0=off, 1=orange, 2=green
     # blink: 0=off, #=n times
-    if verbose == 2: print(f" > RGB LED: {get_rgb_hex(color=color, name=True)} {'(blinking ' + str(blink) + ' times)' if blink else ''}")
+    if verbose == 2: print(f" > LED: {'orange' if color == 1 else 'green' if color == 2 else 'off'} {'(blinking ' + str(blink) + ' times)' if blink else ''}")
 
     if color == 0:
-        RGBLED.off()
-    if type(color) == int:
-        color: str = get_rgb_hex(color=color)
-    if blink == 0:
-        RGBLED.color(rgb_hex=color)
+        led_off()
+        return
+    if color == 1:
+        led_on = LED_ORANGE
+        led_off = LED_GREEN
+    elif color == 2:
+        led_on = LED_GREEN
+        led_off = LED_ORANGE
     else:
-        RGBLED.blink(rgb_hex=color, n=blink)
+        if verbose == 2: print(" > Unknown LED color")
+        return
+
+    led_off.off()
+    if blink == 0:
+        led_on.on()
+    else:
+        led_on.blink(on_time=0.5, off_time=0.5, n=blink)
     return
 
 
@@ -228,21 +229,23 @@ def command_move(x: int, y: int, verbose: int=0) -> None:
     x = cap_position(pos=x, min_pos=0, max_pos=DIMENSIONS['size']['x'])
     y = cap_position(pos=y, min_pos=-DIMENSIONS['size']['y'], max_pos=0)
 
-    if verbose == 2: print(f" > Moving to position: [X {x:3 if x else '---'} | Y {y:3 if y else '---'}] mm", end="\r")
+    if verbose == 2: print(f" > Moving to position: [X {x if x is not None else '---'} | Y {y if y is not None else '---'}] mm", end="\r")
 
     # Move both axes
-    if x and y is not None:
+    if x is not None and y is not None:
         # Create threads to move both axis at the same time
         move_x_thread = threading.Thread(target=move_x, kwargs={'x': x})
-        move_y_thread = threading.Thread(target=move_y, kwargs={'y': y})
+        ret0 = move_y_thread = threading.Thread(target=move_y, kwargs={'y': y})
 
         # Start the threads
         move_x_thread.start()
-        move_y_thread.start()
+        ret1 = move_y_thread.start()
 
         # Wait for both threads to complete
         move_x_thread.join()
-        move_y_thread.join()
+        ret2 = move_y_thread.join()
+
+        print(YPOSITION, y)
     
     # Move only x axis
     elif x is not None:
@@ -261,7 +264,7 @@ def command_move(x: int, y: int, verbose: int=0) -> None:
         return
     
     if verbose == 2: print(f"{50 * ' '}", end="\r")
-    if verbose == 2: print(f" > Moved to position: [X {x:3 if x else '---'} | [Y {y:3 if y else '---'}] mm")
+    if verbose == 2: print(f" > Moved to position: [X {x if x else '---'} | [Y {y if y else '---'}] mm")
     return
 
     
@@ -275,35 +278,31 @@ def command_reset(mode: int, verbose: int=0) -> None:
         # reset and led reset color
         BUTTON_RESET.set_callback([lambda: restart(), lambda: led_reset()])
     elif mode == -1:
-        # error when pressed (blink red)
+        # error when pressed (blink)
         BUTTON_START.set_callback(led_error)
     return
 
 
 def command_start(mode: int, verbose: int=0) -> None:
-    # mode: 0=None, 1=start, 2=wait for ingredients, -1=error
-    if verbose == 2: print(f" > Start Button: {'off' if mode == 0 else 'wait for press to continue' if mode == 1 else 'wait for ingredient selection and confirm' if mode == 2 else 'error light on press'}")
+    # mode: 0=None, 1=start, -1=error
+    if verbose == 2: print(f" > Start Button: {'off' if mode == 0 else 'wait for press to continue' if mode == 1 else 'error light on press'}")
     if mode == 0:
         # disable button
         BUTTON_START.set_callback(None)
     elif mode == 1:
-        # wait for press and blink green
-        BUTTON_START.set_callback(led_success)
-        while True:
-            if BUTTON_START.status():
-                break
-        BUTTON_START.set_callback(None)
-    elif mode == 2:
         # block until ingredient is selected, then continue
         while True:
             # no ingredient selected, blink red
             if not any([ingredient.status() for ingredient in BUTTON_INGREDIENTS]):
+                # show error light
                 BUTTON_START.set_callback(led_error)
+                # reset start button selection
+                BUTTON_START.deselect()
                 continue
-            # ingredient selected, blink green
-            BUTTON_START.set_callback(led_success)
-            # start pressed, continue
+            BUTTON_START.set_callback(None)
+            # ingredient selected
             if BUTTON_START.status():
+                # start pressed, continue
                 break
         BUTTON_START.set_callback(None)
     elif mode == -1:
@@ -315,7 +314,8 @@ def command_start(mode: int, verbose: int=0) -> None:
 def command_template(active: int, verbose: int=0) -> None:
     # active: 0=neutral, 1=active
     if verbose == 2: print(f" > Template moved: {'active' if active else 'neutral'}")
-    MOVE_TEMPLATE.set_position(active=bool(active))
+    position: str = 'active' if active else 'neutral'
+    MOVE_TEMPLATE.set_position(position=position)
     return
 
 
@@ -325,7 +325,6 @@ def command_wait(invervall: int, verbose: int=0) -> None:
     time.sleep(invervall / 1000)
     return
 
-    
 
 def move_x(x: int, distance: int=None) -> bool:
     # No info given
@@ -389,12 +388,8 @@ def move_y(y: int, distance: int=None) -> bool:
     MOVE_Y.stop()
 
     # Update YPOSITION
-    if YPOSITION:
-        if y is not None:
-            YPOSITION = y
-        if distance is not None:
-            YPOSITION += distance
-
+    if YPOSITION is not None:
+        YPOSITION += delta
     return True
 
 
@@ -418,7 +413,7 @@ def reset() -> bool:
     move_y(y=0)
     MOVE_TEMPLATE.move_neutral()
     command_ingredients(active=0)
-    command_jngredients(active=0)
+    command_button(active=0)
     return True
 
 
@@ -439,67 +434,45 @@ def cap_position(pos: int, min_pos: int=None, max_pos: int=None) -> int:
         return max_pos
     else:
         return pos
-    
-
-def led_error(blink: int=1) -> bool:
-    # blink once red
-    RGBLED.blink(rgb_hex=get_rgb_hex(1), n=blink)
+ 
+def led_off() -> bool:
+    # light off
+    LED_ORANGE.off()
+    LED_GREEN.off()
     return True
 
-def led_success(blink: int=1) -> bool:
-    # blink once green
-    RGBLED.blink(rgb_hex=get_rgb_hex(2), n=blink)
+def led_error(blink: int=3) -> bool:
+    # light orange
+    LED_ORANGE.blink(on_time=0.25, off_time=0.25, n=blink)
+    LED_ORANGE.off()
     return True
 
-def led_reset(blink: int=1) -> bool:
-    # blink once magenta
-    RGBLED.color(rgb_hex=get_rgb_hex(5))
+def led_busy(blink: int=1) -> bool:
+    # light orange
+    LED_ORANGE.on()
+    return True
+
+def led_ready(blink: int=3) -> bool:
+    # blink 3times green, then stay on
+    LED_GREEN.blink(n=blink)
+    LED_GREEN.on()
+    return True
+
+def led_reset(blink: int=3) -> bool:
+    # blink 3times orange, then stay on
+    LED_ORANGE.blink(n=blink)
+    LED_ORANGE.on()
     return True
 
 def led_switch(state: bool, blink: int=1) -> bool:
     if state:
-        # blink once green
-        RGBLED.blink(rgb_hex=get_rgb_hex(2), n=blink)
+        # blink green
+        LED_GREEN.blink(on_time=0.25, off_time=0.25, n=blink)
+        LED_GREEN.on()
     else:
-        # blink once red
-        RGBLED.blink(rgb_hex=get_rgb_hex(1), n=blink)
+        # blink orange
+        LED_ORANGE.blink(on_time=0.25, off_time=0.25, n=blink)
     return True
-    
-
-def get_rgb_hex(color:int, name: bool=False) -> str:
-    if color == 1:
-        # red
-        if name: return "red"
-        return "FF0000"
-    elif color == 2:
-        # green
-        if name: return "green"
-        return "00FF00"
-    elif color == 3:
-        # blue
-        if name: return "blue"
-        return "0000FF"
-    elif color == 4:
-        # yellow
-        if name: return "yellow"
-        return "FFFF00"
-    elif color == 5:
-        # magenta
-        if name: return "magenta"
-        return "FF00FF"
-    elif color == 6:
-        # cyan
-        if name: return "cyan"
-        return "00FFFF"
-    elif color == 7:
-        # white
-        if name: return "white"
-        return "FFFFFF"
-    else:
-        # off
-        if name: return "off"
-        return "000000"
-    
 
 
 def parameter(command: list[str]) -> list[str]:

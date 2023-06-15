@@ -47,7 +47,7 @@ def calibrate_axis(components, dimensions, axis):
             (4, "Save to config", None)
         ]
     elif axis == 'y':
-        motor = StepperMotor(components.get('motors').get('move_y'), 0)
+        motor = StepperMotor(components.get('motors').get('move_y'))
         sensor = HallSensor(components.get('position').get('pos_y'))
         steps = [
             (0, "Overview", None),

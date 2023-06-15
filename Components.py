@@ -6,10 +6,6 @@ import board
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 
-# Button Hat Library
-# https://github.com/pimoroni/button-shim
-import buttonshim
-
 # ToF Library
 # https://github.com/adafruit/Adafruit_CircuitPython_VL53L4CD
 import adafruit_vl53l4cd
@@ -28,31 +24,26 @@ from adafruit_servokit import ServoKit
 
 class Button:
     def __init__(self, button: dict):
-        try:
-            buttonshim.setup()
-        except OSError:
-            print("ButtonSHIM not installed")
-            exit(1)
-        
-        self._shim_slot = self._find_shim_slot(button.get('slot'))
         self.name: str = button.get('name')
         self.key: str = button.get('key')
         self.type: str = button.get('type')
+        self.pin: str = button.get('pin')
+        self.gpio: int = button.get('gpio')
+        self._bounce_time: int = 500
         self._state: bool = False
         self._callback = None
 
-        @buttonshim.on_press(self._shim_slot)
-        def button_press(button, pressed):
-            self.pressed()  
+        if self.gpio:
+            # Set Switch GPIO as input + pull high (no magnet) by default
+            GPIO.setup(self.gpio, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            # Listen for switch presses
+            GPIO.add_event_detect(self.gpio, GPIO.FALLING, callback=self.pressed, bouncetime=self._bounce_time)
 
-        @buttonshim.on_release(self._shim_slot)
-        def button_hold(button, pressed):
-            self.released()
 
-    def pressed(self) -> None:
+    def pressed(self, pin) -> None:
         if self.type == 'button':
             self.select()
-        elif self.type == 'toggle':
+        elif self.type == 'switch':
             self.toggle()
         if self._callback:
             if isinstance(self._callback, list):
@@ -60,12 +51,6 @@ class Button:
                     callback()
             else:
                 self._callback()
-
-    def released(self) -> None:
-        if self.type == 'button':
-            self.deselect()
-        elif self.type == 'toggle':
-            self.toggle()
 
     def status(self) -> bool:
         return self._state
@@ -82,57 +67,36 @@ class Button:
     def set_callback(self, callback=None) -> None:
         self._callback = callback
 
-    def _find_shim_slot(self, slot:str) -> int:
-        # Find the slot of the button on the Button Shim
-        if slot == "A":
-            return buttonshim.BUTTON_A
-        elif slot == "B":
-            return buttonshim.BUTTON_B
-        elif slot == "C":
-            return buttonshim.BUTTON_C
-        elif slot == "D":
-            return buttonshim.BUTTON_D
-        elif slot == "E":
-            return buttonshim.BUTTON_E
-        else:
-            return None
-        
 
-class LEDrgb:
+class Led:
     def __init__(self, led: dict) -> None:
-        try:
-            buttonshim.setup()
-        except OSError:
-            print("ButtonSHIM not installed")
-            exit(1)
-    
         self.name: str = led.get('name')
         self.key: str = led.get('key')
         self.type: str = led.get('type')
-        self._blink_speed = led.get('blink_speed')
+        self.pin: str = led.get('pin')
+        self.gpio: int = led.get('gpio')
 
-    def color(self, rgb_hex: str=0x000000) -> None:
-        r, g, b = self._str_2_rgb(rgb_hex)
-        buttonshim.set_pixel(r, g, b)
+        # Set LED GPIO as output
+        GPIO.setup(self.gpio, GPIO.OUT)
+        # Set LED GPIO to low
+        GPIO.output(self.gpio, GPIO.LOW)
 
-    def blink(self, on_color: str=0x000000, n: int=1) -> None:
-        r, g, b = self._str_2_rgb(on_color)
-        for _ in range(n):
-            buttonshim.set_pixel(r, g, b)
-            time.sleep(self._blink_speed/2)
-            buttonshim.set_pixel(0x00, 0x00, 0x00)
-            time.sleep(self._blink_speed/2)
-
-    def brightness(self, brightness: int) -> None:
-        buttonshim.set_brightness(brightness)
-
+    def on(self) -> None:
+        GPIO.output(self.gpio, GPIO.HIGH)
+    
     def off(self) -> None:
-        buttonshim.set_pixel(0x00, 0x00, 0x00)
+        GPIO.output(self.gpio, GPIO.LOW)
+    
+    def toggle(self) -> None:
+        GPIO.output(self.gpio, not GPIO.input(self.gpio))
 
-    def _str_2_rgb(self, rgb_hex: str) -> tuple:
-        # Convert the hexadecimal string to RGB values
-        return tuple(int(rgb_hex[i:i+2], 16) for i in (0, 2, 4))
-        
+    def blink(self, on_time: float=0.5, off_time: float=0.5, n: int=1) -> None:
+        for _ in range(n):
+            self.on()
+            time.sleep(on_time)
+            self.off()
+            time.sleep(off_time)
+
 
 class StepperMotor:
     _direction_options = {
@@ -233,6 +197,7 @@ class StandardServoMotor:
         self.type: str = servo.get('type')
         self.slot: int = servo.get('slot')
         self._servo = self._kit.servo[self.slot]
+        self._servo.set_pulse_width_range(500, 2500)
         self.neutral: int = servo.get('neutral')
         self.active: int = servo.get('active')
         self._position: str = None
@@ -240,8 +205,8 @@ class StandardServoMotor:
     def check_position(self) -> str:
         return self._position
 
-    def set_position(self, active: bool) -> None:
-        if active:
+    def set_position(self, position: str) -> None:
+        if position == 'active':
             self.move_active()
         else:
             self.move_neutral()
@@ -261,6 +226,7 @@ class ToFDistanceSensor:
             self._vl53 = adafruit_vl53l4cd.VL53L4CD(board.I2C())
         except ValueError:
             print("ToF Board not installed")
+            exit(1)
 
         self.name: str = tof.get('name')
         self.key: str = tof.get('key')
@@ -277,7 +243,10 @@ class ToFDistanceSensor:
         self._vl53.clear_interrupt()
         # return the distance in mm minus the offset
         # reflecting area is not at the front of the table
-        return int(self._vl53.distance*10) - offset
+        reading = int(self._vl53.distance*10)
+        if offset:
+            reading -= offset
+        return reading
     
 
 class HallSensor:
@@ -287,22 +256,22 @@ class HallSensor:
         self.key: str = hall.get('key')
         self.type: str = hall.get('type')
         self.pin: int = hall.get('pin')
-        self.GPIO: int = hall.get('GPIO')
+        self.gpio: int = hall.get('GPIO')
         self._bounce_time: int = 200
         self._callback = callback
         # Set Switch GPIO as input + pull high (no magnet) by default
-        if self.GPIO:
-            GPIO.setup(self.GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        if self.gpio:
+            GPIO.setup(self.gpio, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         # Listen for switch presses
         # if callback:
         #     GPIO.add_event_detect(self.GPIO, GPIO.BOTH, callback=self.state_changed, bouncetime=self._bounce_time)
 
     def check_init(self) -> bool:
-        return bool(self.GPIO)
+        return bool(self.gpio)
 
     def sense_magnet(self) -> bool:
         # if Magnet -> LOW == not True
-        return not GPIO.input(self.GPIO)
+        return not GPIO.input(self.gpio)
     
     # def state_changed(self) -> bool:
     #     if self._callback:
@@ -312,9 +281,9 @@ class HallSensor:
 
 class GPIOPin:
     def __init__(self, gpio: int):
-        self.GPIO: int = gpio
+        self.gpio: int = gpio
         # Set Switch GPIO as input + pull high by default
-        GPIO.setup(self.GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.gpio, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def sense(self) -> bool:
-        return bool(self.GPIO)
+        return GPIO.input(self.gpio)

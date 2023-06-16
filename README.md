@@ -1,5 +1,7 @@
 # Susi the Sushi Machine - adveisor TUM
 
+![Mechanics](https://github.com/urmoi/susi-sushi-adveisor/blob/main/susi_sushi_mechanics.gif?raw=true)
+
 ## Introduction
 
 This is the Codebase for our automated Sushi Machine in regards of the [TU Munich adveisor programm](https://www.ce.cit.tum.de/lsr/lehre/adveisor "TUM adveisor") year 2022/2023 project:
@@ -51,7 +53,6 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 - [adafruit-circuitpython-motorkit](https://github.com/adafruit/Adafruit_CircuitPython_MotorKit)
 - [adafruit-circuitpython-servokit](https://github.com/adafruit/Adafruit_CircuitPython_ServoKit)
 - [adafruit-circuitpyrhon-vl53l4cd](https://github.com/adafruit/Adafruit_CircuitPython_VL53L4CD)
-- [button-shim](https://github.com/pimoroni/button-shim)
 - [getch](https://github.com/joeyespo/py-getch)
 
 ## Components
@@ -60,7 +61,6 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 - [Adafruit DC & Stepper Motor HAT & Bonnet for Raspberry Pi](https://www.adafruit.com/product/4280)
 - [Adafruit 16-Channel PWM/Servo HAT & Bonnet for Raspberry Pi](https://www.adafruit.com/product/2327)
 - [Adafruit VL53L4CD Time of Flight Distance Sensor - ~50 to 4000mm](https://www.adafruit.com/product/3317)
-- [Pimoroni ButtonSHIM](https://shop.pimoroni.com/products/button-shim)
 - Servo Motors (continuous rotation and 180° standard)
 - Stepper Motor (e.g. NEMA 14)
 - Hall Sensors (e.g. A3144 with an 10kΩ resistor)

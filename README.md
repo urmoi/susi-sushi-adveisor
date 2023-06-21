@@ -6,7 +6,7 @@
 
 This is the Codebase for our automated Sushi Machine in regards of the [TU Munich adveisor programm](https://www.ce.cit.tum.de/lsr/lehre/adveisor "TUM adveisor") year 2022/2023 project:
 
-    Küchen-Assistent-Roboter | Kitchen-Assistent-Robot
+> #### Küchen-Assistent-Roboter | Kitchen-Assistent-Robot
 
 The goal of this project is to build a robot that can assist in the kitchen.
 The robot should be able to prepare a meal from start to finish and should be easy to use.
@@ -18,24 +18,28 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 
 ## Functionality and Features
 
-### Mechaninics
+> ### [Bedienungsanleitung](https://github.com/urmoi/susi-sushi-adveisor/blob/main/Bedienungsanleitung.pdf?raw=true)
 
-    1. Automatic Distribution of Sushi Rice
-    2. Automatic Loading of Ingredients
-    3. Selection of three different Ingredients
-    4. Automatic Sushi Rolling | Folding Mechanism
+### Functions
 
-       Button Interface with RGB Light Feedback
+> 1. Selection of three different Ingredients
+> 2. Automatic Distribution of Sushi Rice
+> 3. Automatic Loading of Ingredients
+> 4. Automatic Sushi Rolling | Folding Mechanism
 
-       Easy Removing and Cleaning of dirty Parts
+### Handling
+
+> - Button Interface with Light Feedback
+> - Easy Removing and Cleaning of Dirty Parts
+
 
 ### Codebase
 
-     - Python 3.9 running on a Raspberry Pi Zero W
-     - Custom G-code flavored instruction commands (.scode)
-     - Custom firmware | interpreter (firmware.py)
-     - Config file (.json) to setup the Components
-     - Test and Calibrations Scripts (beginning with _) | CLI
+> - Python 3.9 running on a Raspberry Pi Zero W
+> - Custom G-code flavored instruction commands (.scode)
+> - Custom firmware | interpreter (firmware.py)
+> - Config file (.json) to setup the Components
+> - Test and Calibrations Scripts (beginning with _) | CLI
 
 ---
 

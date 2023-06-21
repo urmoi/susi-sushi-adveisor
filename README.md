@@ -6,7 +6,7 @@
 
 This is the Codebase for our automated Sushi Machine in regards of the [TU Munich adveisor programm](https://www.ce.cit.tum.de/lsr/lehre/adveisor "TUM adveisor") year 2022/2023 project:
 
-> #### Küchen-Assistent-Roboter | Kitchen-Assistent-Robot
+> ### Küchen-Assistent-Roboter | Kitchen-Assistent-Robot
 
 The goal of this project is to build a robot that can assist in the kitchen.
 The robot should be able to prepare a meal from start to finish and should be easy to use.
@@ -31,10 +31,10 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 
 ### Handling
 
-> ### [Bedienungsanleitung](https://github.com/urmoi/susi-sushi-adveisor/blob/main/Bedienungsanleitung.pdf?raw=true)
+> #### [Bedienungsanleitung](https://github.com/urmoi/susi-sushi-adveisor/blob/main/Bedienungsanleitung.pdf?raw=true)
+>
 > - Button Interface with Light Feedback
 > - Easy Removing and Cleaning of Dirty Parts
-
 
 ### Codebase
 

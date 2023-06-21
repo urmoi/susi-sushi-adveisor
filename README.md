@@ -1,6 +1,6 @@
-
-
 # Susi the Sushi Machine - adveisor TUM
+
+![Render of Machine](https://github.com/urmoi/susi-sushi-adveisor/blob/main/susi_sushi_render.png?raw=true)
 
 ## Introduction
 
@@ -18,7 +18,9 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 
 ## Functionality and Features
 
-> ### [Bedienungsanleitung](https://github.com/urmoi/susi-sushi-adveisor/blob/main/Bedienungsanleitung.pdf?raw=true)
+### Mechanics
+
+> ![Mechanics Animation](https://github.com/urmoi/susi-sushi-adveisor/blob/main/susi_sushi_mechanics.gif?raw=true)
 
 ### Functions
 
@@ -27,10 +29,9 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 > 3. Automatic Loading of Ingredients
 > 4. Automatic Sushi Rolling | Folding Mechanism
 
-![Mechanics](https://github.com/urmoi/susi-sushi-adveisor/blob/main/susi_sushi_mechanics.gif?raw=true)
-
 ### Handling
 
+> ### [Bedienungsanleitung](https://github.com/urmoi/susi-sushi-adveisor/blob/main/Bedienungsanleitung.pdf?raw=true)
 > - Button Interface with Light Feedback
 > - Easy Removing and Cleaning of Dirty Parts
 
@@ -71,4 +72,4 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 - Stepper Motor (e.g. NEMA 14)
 - Hall Sensors (e.g. A3144 with an 10kΩ resistor)
 
-![Schematics](https://github.com/urmoi/susi-sushi-adveisor/blob/main/schematics_fritzing.png?raw=true)
+![Schematics Fritzing](https://github.com/urmoi/susi-sushi-adveisor/blob/main/schematics_fritzing.png?raw=true)

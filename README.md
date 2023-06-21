@@ -1,6 +1,6 @@
-# Susi the Sushi Machine - adveisor TUM
 
-![Mechanics](https://github.com/urmoi/susi-sushi-adveisor/blob/main/susi_sushi_mechanics.gif?raw=true)
+
+# Susi the Sushi Machine - adveisor TUM
 
 ## Introduction
 
@@ -26,6 +26,8 @@ The schematics are down below, the 3D files will be eventually uploaded to this 
 > 2. Automatic Distribution of Sushi Rice
 > 3. Automatic Loading of Ingredients
 > 4. Automatic Sushi Rolling | Folding Mechanism
+
+![Mechanics](https://github.com/urmoi/susi-sushi-adveisor/blob/main/susi_sushi_mechanics.gif?raw=true)
 
 ### Handling
 
